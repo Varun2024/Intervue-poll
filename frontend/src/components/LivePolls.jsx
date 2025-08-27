@@ -6,7 +6,7 @@ import { FaHistory, FaComment, FaPlus } from 'react-icons/fa';
 import io from 'socket.io-client';
 
 // Establish the socket connection
-const socket = io('http://localhost:3000', {
+const socket = io('https://intervue-poll-b631.onrender.com', {
     transports: ['websocket', 'polling']
 });
 

@@ -9,7 +9,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", 
+    origin: "https://intervue-poll.web.app", 
     methods: ["GET", "POST"]
   }
 });
@@ -24,19 +24,16 @@ let participants = {};
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  // Handle a user joining the room
-  socket.on('joinRoom', ({ name }) => {
-    // Assign role: first user to connect is the teacher
-    const role = Object.keys(participants).length === 0 ? 'teacher' : 'student';
-    participants[socket.id] = { name, role };
-    console.log(`${name} (${role}) joined the room.`);
+socket.on('joinRoom', ({ name, role }) => {
+  // Default to student if no role is provided (safety check)
+  const finalRole = role === 'student' ? 'student' : 'teacher';
 
-    // Send the user their own info (so they know their role)
-    socket.emit('myInfo', { id: socket.id, name, role });
+  participants[socket.id] = { name, role: finalRole };
+  console.log(`${name} (${finalRole}) joined the room.`);
 
-    // Broadcast the updated participant list to ALL clients
-    io.emit('updateParticipantList', Object.values(participants));
-  });
+  socket.emit('myInfo', { id: socket.id, name, role: finalRole });
+  io.emit('updateParticipantList', Object.values(participants));
+});
 
   // Handle a teacher kicking a student
   socket.on('kickUser', (targetId) => {

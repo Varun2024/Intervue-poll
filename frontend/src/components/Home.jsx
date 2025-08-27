@@ -40,7 +40,7 @@ export default function Home() {
                                 ? 'border-indigo-500 bg-indigo-50 shadow-lg'
                                 : 'border-gray-200 hover:border-indigo-400'
                             }`}
-                        onClick={() => { setSelectedRole('teacher') } }
+                        onClick={() => setSelectedRole('teacher') }
                     >
                         <h2 className="mb-2 text-2xl font-semibold text-gray-700">I'm a Teacher</h2>
                         <p className="text-gray-500">

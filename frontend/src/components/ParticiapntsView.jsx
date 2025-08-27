@@ -1,133 +1,12 @@
-// import React, { useState, useEffect } from 'react';
-// import io from 'socket.io-client';
-// import { useParticipant } from '../context/Particiapants';
-// // Connect to the backend server
-// const socket = io('http://localhost:3000');
 
-// const ParticipantsView = () => {
-//     const [participants, setParticipants] = useState([]);
-//     const [currentUser, setCurrentUser] = useState(null);
-//     const [activeTab, setActiveTab] = useState('Participants');
-//     const { participantName } = useParticipant();
-//     //   useEffect(() => {
-//     //     const name = prompt("Please enter your name to join:");
-//     //     if (name) {
-//     //       socket.emit('joinRoom', { name });
-//     //     }
-
-//     //     // --- Socket Event Listeners ---
-//     //     socket.on('myInfo', (userInfo) => {
-//     //       setCurrentUser(userInfo);
-//     //     });
-
-//     //     socket.on('updateParticipantList', (participantList) => {
-//     //       setParticipants(participantList);
-//     //     });
-
-//     //     // Clean up listeners
-//     //     return () => {
-//     //       socket.off('myInfo');
-//     //       socket.off('updateParticipantList');
-//     //     };
-//     //   }, []);
-
-//     useEffect(() => {
-//         // 3. Only join the room if the name has been set from the welcome page
-//         if (participantName) {
-//             socket.emit('joinRoom', { name: participantName });
-//         }
-
-//         // --- Socket Event Listeners ---
-//         socket.on('myInfo', (userInfo) => {
-//             console.log('My info received:', userInfo);
-//             setCurrentUser(userInfo);
-//         });
-
-//         socket.on('updateParticipantList', (participantList) => {
-//             setParticipants(participantList);
-//         });
-
-//         // Clean up listeners when the component unmounts
-//         return () => {
-//             socket.off('myInfo');
-//             socket.off('updateParticipantList');
-//         };
-//         // 4. Re-run this effect if the participantName changes
-//     }, [participantName]);
-
-//     const handleKickOut = (participantToKick) => {
-//         if (window.confirm(`Are you sure you want to kick out ${participantToKick.name}?`)) {
-//             socket.emit('kickUser', participantToKick.id);
-//         }
-//     };
-
-//     // Helper for dynamic tab styling
-//     const getTabClass = (tabName) => {
-//         return `relative flex-1 py-4 px-2 text-center text-sm font-semibold cursor-pointer transition-colors duration-200 focus:outline-none ${activeTab === tabName
-//                 ? 'text-purple-600'
-//                 : 'text-gray-500 hover:text-gray-800'
-//             }`;
-//     };
-
-//     return (
-//         // Main container
-//         <div className="w-96 bg-white rounded-xl shadow-lg border border-gray-200 font-sans overflow-hidden">
-//             {/* Tabs */}
-//             <div className="flex border-b border-gray-200">
-//                 <button className={getTabClass('Chat')} onClick={() => setActiveTab('Chat')}>
-//                     Chat
-//                     {activeTab === 'Chat' && <span className="absolute bottom-[-1px] left-0 w-full h-1 bg-purple-600 rounded-t-full"></span>}
-//                 </button>
-//                 <button className={getTabClass('Participants')} onClick={() => setActiveTab('Participants')}>
-//                     Participants
-//                     {activeTab === 'Participants' && <span className="absolute bottom-[-1px] left-0 w-full h-1 bg-purple-600 rounded-t-full"></span>}
-//                 </button>
-//             </div>
-
-//             {/* List container */}
-//             <div className="px-6 pb-4">
-//                 {/* List Header */}
-//                 <div className="flex justify-between py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-//                     <span>Name</span>
-//                     <span>Action</span>
-//                 </div>
-
-//                 {/* List Body */}
-//                 <div className="divide-y divide-gray-100">
-//                     {participants.map((participant) => (
-//                         <div className="flex justify-between items-center py-3" key={participant.id}>
-//                             {/* Participant Name */}
-//                             <span className="text-gray-800 font-medium text-base">
-//                                 {participant.name}
-//                                 {participant.id === currentUser?.id && <span className="text-gray-400 font-normal text-sm ml-2">(You)</span>}
-//                             </span>
-
-//                             {/* Action Button */}
-//                             <div>
-//                                 {currentUser?.role === 'teacher' && participant.role === 'student' && (
-//                                     <button
-//                                         onClick={() => handleKickOut(participant)}
-//                                         className="bg-transparent border-none text-blue-500 font-semibold text-sm p-0 hover:underline focus:outline-none"
-//                                     >
-//                                         Kick out
-//                                     </button>
-//                                 )}
-//                             </div>
-//                         </div>
-//                     ))}
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default ParticipantsView;
 
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 
 
-const socket = io('http://localhost:3000');
+const socket = io('https://intervue-poll-b631.onrender.com',{
+    transports: ['websocket' , "polling"]
+});
 import { useParticipant } from '../context/Particiapants';
 
 
@@ -211,7 +90,7 @@ const ParticipantsView = () => {
     useEffect(() => {
         // Only join the room if the name has been set from the welcome page
         if (participantName) {
-            socket.emit('joinRoom', { name: participantName });
+            socket.emit('joinRoom', { name: participantName, role: 'student' });
         }
 
         // --- Socket Event Listeners ---

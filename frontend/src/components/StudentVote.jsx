@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
 // Make sure this URL matches your backend server address
-const socket = io('http://localhost:3000');
+const socket = io('https://intervue-poll-b631.onrender.com',{
+    transports: ['websocket', 'polling']
+});
 
 // A simple chat bubble icon component (no changes needed here)
 const ChatIcon = () => (
