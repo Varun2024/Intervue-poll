@@ -38,13 +38,14 @@ socket.on('joinRoom', ({ name, role }) => {
   // Handle a teacher kicking a student
   socket.on('kickUser', (targetId) => {
     // Security Check: Only a teacher can kick users
-    if (participants[socket.id] && participants[socket.id].role === 'teacher') {
+    if (participants[socket.id] && participants[socket.id].role !== 'student') {
       const userToKick = io.sockets.sockets.get(targetId);
       if (userToKick) {
         console.log(`Kicking user ${targetId}`);
         userToKick.disconnect(true); // Force disconnect the target user
       }
     }
+    return "kicked";
   });
 
   // --- NEW: Chat Logic --- START --- 💬
