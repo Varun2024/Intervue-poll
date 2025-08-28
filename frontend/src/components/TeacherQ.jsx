@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { FaPoll, FaPlus } from 'react-icons/fa';
 import io from 'socket.io-client';
 import { TbTriangleInvertedFilled } from "react-icons/tb";
-
+import { useParticipant } from '../context/Particiapants';
 // Establish the socket connection outside the component
 const socket = io('https://intervue-poll-b631.onrender.com', { transports: ['websocket' , 'polling'] });
 
@@ -13,7 +13,7 @@ export default function CreatePollPage() {
     const [options, setOptions] = useState([{ text: '', isCorrect: false }, { text: '', isCorrect: false }]);
     const [timer, setTimer] = useState(60); // Timer state
     const timerOptions = [15, 30, 45, 60, 90, 120];
-
+    const { setParticipantName } = useParticipant();
     const handleAddOption = () => {
         // Correctly adding a new option object
         setOptions([...options, { text: '', isCorrect: false }]);
@@ -36,7 +36,7 @@ export default function CreatePollPage() {
     const handleCreatePoll = () => {
         // Find the correct option text
         const correctOption = options.find(option => option.isCorrect)?.text;
-
+        setParticipantName("Teacher");
         // Check if a correct option is selected
         if (!correctOption) {
             alert('Please select a correct answer.');

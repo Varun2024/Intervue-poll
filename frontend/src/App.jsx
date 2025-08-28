@@ -7,6 +7,7 @@ import IntervuePoll from './components/StudentHome'
 import Vote from './components/StudentVote'
 import ChatIcon from './components/ChatIcon'
 import KickedOutScreen from './components/KickOut'
+import PollHistory from './components/PollHistory'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path="/student-home" element={<IntervuePoll />} />
       <Route path="/student-vote" element={<Vote />} />
       <Route path="/kicked" element={<KickedOutScreen />} />
+      <Route path='/history' element={<PollHistory/>} />
     </Routes>
     <ChatIcon />
     </>

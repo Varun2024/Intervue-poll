@@ -73,7 +73,6 @@ socket.on('joinRoom', ({ name, role }) => {
       socket.emit('chatError', 'You must join the room before sending messages.');
     }
   });
-  // --- NEW: Chat Logic --- END ---
 
   // --- Polling Logic ---
   if (currentPoll) {

@@ -176,10 +176,9 @@ const ParticipantsView = () => {
                                 <div className="flex justify-between items-center py-3" key={participant.id}>
                                     <span className="text-gray-800 font-medium text-base">
                                         {participant.name}
-                                        {participant.id === currentUser?.id && <span className="text-gray-400 font-normal text-sm ml-2">(You)</span>}
                                     </span>
                                     <div>
-                                        {currentUser?.role !== 'student' && participant.id === currentUser?.id && (
+                                        {currentUser?.role !== 'student' && (
                                             <button
                                                 onClick={() => handleKickOut(participant)}
                                                 className="bg-transparent border-none text-red-500 font-semibold text-sm p-0 hover:underline focus:outline-none"

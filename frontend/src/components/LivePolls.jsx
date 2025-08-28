@@ -11,20 +11,21 @@ const socket = io('https://intervue-poll-b631.onrender.com', {
 
 export default function LivePollResults() {
     const [poll, setPoll] = useState(null); // Use state to manage poll data
-
     useEffect(() => {
         // Listen for new poll data from the server
         socket.on('pollData', (newPoll) => {
+            const pollId = newPoll.id || Date.now();
             console.log('Received new poll data:', newPoll);
             const initialOptions = newPoll.options.map(optionText => ({
                 text: optionText,
                 percentage: 0,
             }));
             setPoll({
+                id: pollId,
                 question: newPoll.question,
                 options: initialOptions,
             });
-            const pollRef = ref(db, `polls/${newPoll.id || Date.now()}`);
+            const pollRef = ref(db, `polls/${pollId}`);
             set(pollRef, {
                 question: newPoll.question,
                 options: newPoll.options,
@@ -55,7 +56,7 @@ export default function LivePollResults() {
                 });
 
                 // ✅ Update results in Firebase
-                const pollRef = ref(db, `polls/${updatedPoll.id || 'latestPoll'}`);
+                const pollRef = ref(db, `polls/${prevPoll.id}`);
                 update(pollRef, {
                     votes: updatedPoll.votes
                 });
@@ -92,7 +93,9 @@ return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 font-sans">
         {/* Header with View Poll History button */}
         <div className="absolute right-4 top-4 ">
-            <button className="flex items-center rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 px-6 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105">
+            <button
+            onClick={() => window.location.href = '/history'} 
+            className="flex items-center rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 px-6 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105">
                 <FaHistory className="mr-2" />
                 View Poll history
             </button>
@@ -129,7 +132,7 @@ return (
                                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm text-[#6E6E6E]">
                                         {index + 1}
                                     </span>
-                                    <span className={`text-lg ${poll ? 'text-white' : 'text-black'}`}>{option.text}</span>
+                                    <span className={`text-lg text-black`}>{option.text}</span>
                                 </div>
                                 <span className="text-lg font-bold text-gray-800">{option.percentage.toFixed(0)}%</span>
                             </div>
