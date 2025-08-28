@@ -6,6 +6,7 @@ import LivePollResults from './components/LivePolls'
 import IntervuePoll from './components/StudentHome'
 import Vote from './components/StudentVote'
 import ChatIcon from './components/ChatIcon'
+import KickedOutScreen from './components/KickOut'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <Route path="/live-polls" element={<LivePollResults />} />
       <Route path="/student-home" element={<IntervuePoll />} />
       <Route path="/student-vote" element={<Vote />} />
+      <Route path="/kicked" element={<KickedOutScreen />} />
     </Routes>
     <ChatIcon />
     </>

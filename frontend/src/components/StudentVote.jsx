@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 
 // Make sure this URL matches your backend server address
-const socket = io('https://intervue-poll-b631.onrender.com',{
+const socket = io('https://intervue-poll-b631.onrender.com', {
     transports: ['websocket', 'polling']
 });
 
@@ -22,7 +23,7 @@ function Vote() {
     const [results, setResults] = useState(null);
     // ✨ NEW: State to manage the countdown timer
     const [timeLeft, setTimeLeft] = useState(0);
-
+    const navigate = useNavigate();
     useEffect(() => {
         // --- SOCKET.IO EVENT LISTENERS ---
         socket.on('pollData', (data) => {
@@ -44,6 +45,13 @@ function Vote() {
         socket.on('voteError', (errorMessage) => {
             alert(errorMessage);
         });
+
+        socket.on('kickedOut', (data) => {
+            if (data === "kicked") {
+                navigate('/kicked');
+            }
+        });
+
 
         return () => {
             socket.off('pollData');
@@ -98,7 +106,7 @@ function Vote() {
     }
 
     const totalVotes = results ? Object.values(results).reduce((sum, count) => sum + count, 0) : 0;
-    
+
     // ✨ NEW: Determine if the voting period is over (by voting or timer)
     const isPollFinished = hasVoted || timeLeft === 0;
 
@@ -121,11 +129,11 @@ function Vote() {
                             {poll.options.map((option, index) => {
                                 const voteCount = results ? results[option] : 0;
                                 const percentage = totalVotes > 0 ? (voteCount / totalVotes) * 100 : 0;
-                                
+
                                 // ✨ NEW: Determine styling based on vote status and correctness
                                 const isSelected = selectedOption === option;
                                 const isCorrect = poll.correctOption === option;
-                                
+
                                 let optionStyle = 'border-slate-300 group-disabled:cursor-not-allowed';
                                 if (isPollFinished) {
                                     if (isCorrect) {
@@ -169,7 +177,7 @@ function Vote() {
                                                         className={`h-full rounded-full ${isCorrect ? 'bg-green-500' : 'bg-indigo-500'} transition-all duration-500`}
                                                         style={{ width: `${percentage}%` }}
                                                     />
-                                                </div> 
+                                                </div>
                                                 <span className="w-12 text-right font-semibold text-violet-700">
                                                     {percentage.toFixed(0)}%
                                                 </span>
@@ -192,13 +200,13 @@ function Vote() {
                                 Submit
                             </button>
                         )}
-                         {isPollFinished && (
-                             <p className="text-center font-semibold text-slate-600">Voting has ended. Here are the results.</p>
-                         )}
+                        {isPollFinished && (
+                            <p className="text-center font-semibold text-slate-600">Voting has ended. Here are the results.</p>
+                        )}
                     </div>
                 </form>
             </div>
-            
+
         </main>
     );
 }

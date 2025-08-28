@@ -11,6 +11,7 @@ import { useParticipant } from '../context/Particiapants';
 
 
 
+
 // A new, dedicated component for the chat interface
 const ChatView = ({ messages, currentUser }) => {
     const [newMessage, setNewMessage] = useState('');
@@ -84,7 +85,6 @@ const ParticipantsView = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [activeTab, setActiveTab] = useState('Participants');
     const [messages, setMessages] = useState([]); // State for chat messages
-
     const { participantName } = useParticipant();
 
     useEffect(() => {
@@ -133,6 +133,7 @@ const ParticipantsView = () => {
         if (confirm(`Are you sure you want to kick out ${participantToKick.name}?`)) {
             socket.emit('kickUser', participantToKick.id);
         }
+
     };
 
     // Helper for dynamic tab styling
@@ -178,7 +179,7 @@ const ParticipantsView = () => {
                                         {participant.id === currentUser?.id && <span className="text-gray-400 font-normal text-sm ml-2">(You)</span>}
                                     </span>
                                     <div>
-                                        {currentUser?.role === 'teacher' && participant.id !== currentUser?.id && (
+                                        {currentUser?.role !== 'student' && participant.id === currentUser?.id && (
                                             <button
                                                 onClick={() => handleKickOut(participant)}
                                                 className="bg-transparent border-none text-red-500 font-semibold text-sm p-0 hover:underline focus:outline-none"
