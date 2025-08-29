@@ -5,7 +5,7 @@
 ##  Overview
 
 Intervue Poll is a **real-time polling web app**, ideally suited for interactive classroom environments. Teachers can create timed polls, students can join rooms and vote live, and results are displayed instantly. It's built for speed, simplicity, and scalability using modern web technologies.
-
+Preview: https://intervue-poll.web.app/
 ##  Features
 
 ### Teacher (Host) Features
@@ -44,3 +44,4 @@ Optionally review past polls in the Poll History panel.
 Enter the room code or click the shared link.
 View poll options and cast your vote.
 See results update live; if you're removed by the teacher, you'll be redirected to a specific page.
+
